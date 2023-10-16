@@ -8,15 +8,18 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
 
-    - name: Set up Java
-      uses: actions/setup-java@v2
+    - name: Set up JDK
+      uses: actions/setup-java@v1
       with:
-        java-version: 11  # Escolha a versão Java adequada
+        java-version: 1.8
 
     - name: Build WAR File
       run: mvn clean install
@@ -26,8 +29,7 @@ jobs:
       run: |
         curl -u ${{ secrets.TOMCAT_USERNAME }}:${{ secrets.TOMCAT_PASSWORD }} \
              --upload-file path/to/your/project/build/libs/your-app.war \
-             http://tomcat-host:8080/manager/text/deploy?path=/your-app
-        # Substitua as variáveis pelo nome de usuário, senha e host do seu Tomcat
+             http://localhost:8081/manager/text/deploy?path=/your-app
       env:
         TOMCAT_USERNAME: ${{ secrets.TOMCAT_USERNAME }}
         TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
