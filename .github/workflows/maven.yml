@@ -1,0 +1,35 @@
+name: Deploy Java Web App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+    - name: Build WAR File
+      run: mvn clean install
+      working-directory: C:\Users\rodrigo.r.alcaide\Desktop\Tarefa_TomCat\java-azure-devops-master
+
+    - name: Deploy to Tomcat
+      run: |
+        curl -u ${{ secrets.TOMCAT_USERNAME }}:${{ secrets.TOMCAT_PASSWORD }} \
+             --upload-file path/to/your/project/build/libs/your-app.war \
+             http://localhost:8081/manager/text/deploy?path=/your-app
+      env:
+        TOMCAT_USERNAME: ${{ secrets.TOMCAT_USERNAME }}
+        TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
