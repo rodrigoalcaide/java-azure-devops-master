@@ -25,9 +25,14 @@ jobs:
 
     - name: Deploy to Tomcat
       run: |
-        curl -u %TOMCAT_USERNAME%:%TOMCAT_PASSWORD% ^
-         --upload-file C:\Users\rodrigo.r.alcaide\Desktop\Tarefa_TomCat\java-azure-devops-master\target\JSPSample-0.0.1.war ^
-         http://localhost:8081/manager/text/deploy?path=/your-app
+        $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("${env:TOMCAT_USERNAME}:${env:TOMCAT_PASSWORD}"))
+        $url = "http://localhost:8081/manager/text/deploy?path=/your-app"
+        $warFile = "C:\Users\rodrigo.r.alcaide\Desktop\Tarefa_TomCat\java-app\build\libs\java-app.war"
+    
+        Invoke-WebRequest -Uri $url -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)} -Method Put -InFile $warFile
+  env:
+    TOMCAT_USERNAME: ${{ secrets.TOMCAT_USERNAME }}
+    TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
       env:
         TOMCAT_USERNAME: ${{ secrets.TOMCAT_USERNAME }}
         TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
