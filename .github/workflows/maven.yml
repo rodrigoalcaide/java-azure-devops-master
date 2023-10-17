@@ -25,9 +25,9 @@ jobs:
 
     - name: Deploy to Tomcat
       run: |
-        curl -u ${{ secrets.TOMCAT_USERNAME }}:${{ secrets.TOMCAT_PASSWORD }} \
-             --upload-file path/to/your/project/build/libs/your-app.war \
-             http://localhost:8081/manager/text/deploy?path=/your-app
+        curl -u %TOMCAT_USERNAME%:%TOMCAT_PASSWORD% ^
+         --upload-file path\to\your\project\build\libs\your-app.war ^
+         http://localhost:8081/manager/text/deploy?path=/your-app
       env:
         TOMCAT_USERNAME: ${{ secrets.TOMCAT_USERNAME }}
         TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
