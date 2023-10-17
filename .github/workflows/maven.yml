@@ -25,12 +25,15 @@ jobs:
 
     - name: Deploy to Tomcat
       run: |
-        $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("${env:TOMCAT_USERNAME}:${env:TOMCAT_PASSWORD}"))
+        $basicAuth = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("${env:TOMCAT_USERNAME}:${env:TOMCAT_PASSWORD}"))
         $url = "http://localhost:8081/manager/text/deploy?path=/your-app"
         $warFile = "C:\Users\rodrigo.r.alcaide\Desktop\Tarefa_TomCat\java-app\build\libs\java-app.war"
+
+        $curlArgs = @("-u", $basicAuth, "--upload-file", $warFile, $url)
     
-        Invoke-WebRequest -Uri $url -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)} -Method Put -InFile $warFile
-  env:
+        curl @curlArgs
+    
+        
     TOMCAT_USERNAME: ${{ secrets.TOMCAT_USERNAME }}
     TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
       env:
