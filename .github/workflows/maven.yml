@@ -26,7 +26,7 @@ jobs:
     - name: Deploy to Tomcat
       run: |
         curl -u %TOMCAT_USERNAME%:%TOMCAT_PASSWORD% ^
-         --upload-file path\to\your\project\build\libs\your-app.war ^
+         --upload-file C:\Users\rodrigo.r.alcaide\Desktop\Tarefa_TomCat\java-azure-devops-master\target\JSPSample-0.0.1.war ^
          http://localhost:8081/manager/text/deploy?path=/your-app
       env:
         TOMCAT_USERNAME: ${{ secrets.TOMCAT_USERNAME }}
