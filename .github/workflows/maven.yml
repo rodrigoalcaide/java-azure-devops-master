@@ -32,10 +32,6 @@ jobs:
         $curlArgs = @("-u", $basicAuth, "--upload-file", $warFile, $url)
     
         curl @curlArgs
-    
-        
-    TOMCAT_USERNAME: ${{ secrets.TOMCAT_USERNAME }}
-    TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
       env:
         TOMCAT_USERNAME: ${{ secrets.TOMCAT_USERNAME }}
         TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
